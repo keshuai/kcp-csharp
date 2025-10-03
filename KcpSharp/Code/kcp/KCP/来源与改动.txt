@@ -1,0 +1,5 @@
+来源库：MIT License
+https://github.com/limpo1989/kcp-csharp
+
+改动:
+对KCP.public int Send(byte[] buffer, int index, int length)方法进行注释，让其支持发送空数据包。
