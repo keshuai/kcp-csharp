@@ -11,7 +11,6 @@ namespace KcpSharp;
 public class KcpListener
 {
     private KcpConnectionManager _connectionManager;
-    private Socket _tcpSocket;
     private Socket _udpSocket;
     
     public Action<KcpListener, KcpConnection> OnClientConnected;
@@ -22,7 +21,6 @@ public class KcpListener
     {
         _connectionManager = new KcpConnectionManager(this);
         _listenPort = listenPort;
-        //_tcpSocket = CreateTcpSocket(_listenPort);
         _udpSocket = CreateUdpSocket(_listenPort);
         Console.WriteLine($"KcpListener listen on port: {listenPort}");
     }
@@ -115,25 +113,6 @@ public class KcpListener
     internal void RemoveConnection(KcpConnection connection)
     {
         _connectionManager.RemoveConnection(connection);
-    }
-
-    private static Socket CreateTcpSocket(ushort listenPort)
-    {
-        Socket socket;
-        
-        if (HasIPv6())
-        {
-            socket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
-            socket.DualMode = true;
-            socket.Bind(new IPEndPoint(IPAddress.IPv6Any, listenPort));
-        }
-        else
-        {
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Bind(new IPEndPoint(IPAddress.Any, listenPort));
-        }
-        
-        return socket;
     }
     
     private static Socket CreateUdpSocket(ushort listenPort)
